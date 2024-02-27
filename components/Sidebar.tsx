@@ -2,6 +2,9 @@ import React, {useContext} from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { ThemeContext } from "../layout/RootLayout";
+import Modal from "./Modal";
+import Portal from "./Portal";
+import TestModal from "./TestModal";
 
 const SidebarWrapper = styled.div<{$background: string, $text: string}>`
     background: ${props => props.$background};
@@ -28,34 +31,65 @@ const MENU = [
     },
     {
         id: 2,
-        title: "Projects",
-        link: "#"
+        title: "Settings",
+        link: "/settings"
     },
     {
         id: 3,
-        title: "Settings",
-        link: "/settings"
+        title: "Projects",
+        link: "#",
+        children: [
+            {
+                id: 21,
+                title: "Add New",
+                icon: "",
+                callback: () => {},
+            }
+        ]
+    },
+    {
+        id: 4,
+        title: "Logout",
+        link: "#"
     }
 ]
+
 function Sidebar() {
     const {colors} = useContext(ThemeContext);
     const {sidebar} = colors;
-    console.log(sidebar)
+
     return (
         <SidebarWrapper $background={sidebar.background} $text={sidebar.text}>
             <SidebarList>
-                {
-                    MENU.map((item) => (
-                    <ListItem key={item.id} $hover={sidebar.hoverBg}>
-                        <Link to={item.link}>
-                            {item.title}
-                        </Link>
-                    </ListItem>
-                    ))
-                }
+                <SidebarItem Menu={MENU} hoverbg={sidebar.hoverBg} />
             </SidebarList>
         </SidebarWrapper>
     )
 }
 
 export default Sidebar;
+
+function SidebarItem({Menu, hoverbg}) {
+    return (
+        <>
+            {
+                Menu.map((item) => {
+
+                    return (
+                        <>
+                            <ListItem key={item.id} $hover={hoverbg}>
+                                <Link to={item.link}>
+             
+                                {item.title}
+                                </Link>
+                            </ListItem>
+                            {
+                                item.children && <SidebarItem Menu={item.children} hoverbg={hoverbg} />
+                            }
+                        </>
+                    )
+                })
+            }
+        </>
+    )
+}

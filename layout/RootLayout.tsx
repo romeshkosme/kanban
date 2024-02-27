@@ -11,6 +11,7 @@ const LayoutWrapper = styled.main`
 
 const SidebarContainer = styled.section`
     display: flex;
+    height: calc(100vh - 35px);
 `;
 
 const OutletWrapper = styled.div`
